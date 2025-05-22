@@ -5,8 +5,9 @@ import java.util.Scanner;
 public abstract class View {
     public static Scanner scanner;
     protected static Global global = Global.getInstance();
-    protected String viewPrompt;
-    protected String helperText;
+    public String viewPrompt;
+    public String viewSignature;
+    public String helperText;
 
     public abstract void init();
     public abstract void draw();

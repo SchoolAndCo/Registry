@@ -6,6 +6,9 @@ import Interface.Action;
 public class v_help extends View{
     @Override
     public void init() {
+        viewPrompt = "HELP";
+        viewSignature = "help";
+        helperText = "show the help view";
     }
 
     @Override
