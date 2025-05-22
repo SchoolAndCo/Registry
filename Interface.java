@@ -15,9 +15,19 @@ public class Interface {
         registeredMenuItems.put(name, action);
     }
 
+    private String getStatsView() {
+        StringBuilder sb = new StringBuilder();
+        for (String key : registeredMenuItems.keySet()) {
+            sb.append(Helper.tabLevel(1)+" "+key+"\n");
+        }
+        return sb.toString();
+    }
+
     private boolean cycle() {
+        System.out.println("Registry v1.0 :3\nCommands listed:\n"+getStatsView()+"\n");
+
         if (invalidCommand != null) {
-            System.out.println("Unknown command: " + invalidCommand);
+            System.out.println("Unknown command: " + invalidCommand + "\nplease only use listed commands or help if implemented");
             invalidCommand = null;
         }
 
