@@ -3,28 +3,48 @@ import java.util.List;
 class App extends Interface {
     public Database db = new Database();
 
-    public boolean create() {        
+    public boolean createOrEdit(String id) {        
         Boolean finished = false;
-        Person new_person = new Person();
         String errorMessage = null;
         String command;
+        Person person_object;
+        Integer person_id;
+        Boolean changesFlag = false;
+
+        if (id == null) {
+            person_object = new Person();
+        } else {
+            try {
+                person_id = Integer.parseInt(id);
+            } catch (NumberFormatException e) {
+                showInfo("Edit error: expected id as integer");
+                return true;
+            }
+
+            person_object = db.getEntry(person_id);
+            if (person_object == null) {
+                showInfo("Edit error: no person with the id: "+person_id);
+                return true;
+            }
+
+        }
 
         while (!finished) {
             Helper.clear();
-            System.out.println("Creating new Person");
-            System.out.println(Helper.tabLevel(1)+"Person so far:\n" + new_person.getFullBody(2));
+            System.out.println((id!=null ? "Edit Person" : "Creating new Person"));
+            System.out.println(Helper.tabLevel(1)+"Person so far:\n" + person_object.getFullBody(2));
             
             if (errorMessage != null) {
                 System.out.println(errorMessage);
                 errorMessage = null;
             }
 
-            System.out.print("\nCREATE > ");
+            System.out.print("\n" + (id!=null ? "EDIT" : "CREATE") + "> ");
             command = scanner.nextLine();
             Helper.clearLastLine();
 
-            if (command.equals("create")) {
-                String[] errors = new_person.validate();
+            if (command.equals((id!=null ? "save" : "create"))) {
+                String[] errors = person_object.validate();
                 if (errors.length > 0) {
                     errorMessage = "Some Errors happened:\n";
                     for (String error : errors) {
@@ -36,10 +56,16 @@ class App extends Interface {
                 finished = true;
                 continue;
             } else if (command.equals("cancel")) {
+                if (!changesFlag ) {
+                    showInfo("Canceled "+(id==null ? "creation of person [NO CREATION]" : "updating of Person " + id + " [NO CHANGES]"));
+                    return true;
+                }
+
                 System.out.print("Are you sure you want to cancel?\ndata will be lost\n(type Y to confirm/N is default) > ");
                 String choice = scanner.nextLine();
 
                 if (choice.equals("Y")) {
+                    showInfo("Canceled "+(id==null ? "creation of person " : "updating of Person "));
                     return true;
                 }
             }
@@ -54,19 +80,28 @@ class App extends Interface {
             String key = (String) command_parts.get(0);
             String value = (String) command_parts.get(1);
 
-            if (!new_person.update(key, value)) {
+            if (!person_object.update(key, value)) {
                 errorMessage = "invalid key: " + key;
+                continue;
             }
+
+            changesFlag = true;
         }
 
         Helper.clear();
 
-        db.addEntry(new_person);
-        System.out.println("Person created with ID: " + new_person.getId());
-        System.out.println(new_person.getFullBody(1));
+        if (id == null) {
+            db.addEntry(person_object);
+            System.out.println("Person created with ID: " + person_object.getId());
+        } else {
+            System.out.println("Person updated with ID: " + person_object.getId());
+        }
+        
+        System.out.println(person_object.getFullBody(1));
         System.out.println("Press any key to continue...");
         scanner.nextLine();
-        
+
+        showInfo("Last action: "+(id==null ? "Created Person " : "Updated Person ")+person_object.getId());
         return true;
     }
 
@@ -113,6 +148,7 @@ class App extends Interface {
             }
         }
 
+        showInfo("Last action: Listing all persons");
         return true;
     }
 }
@@ -165,8 +201,9 @@ public class Main {
 
     public static void main(String[] args) {
         fillFakeData();
-        app.register("create", () -> app.create());
-        app.register("list", () -> app.list());
+        app.register("create", arg -> app.createOrEdit(arg));
+        app.register("edit:", arg -> app.createOrEdit(arg));
+        app.register("list", arg -> app.list());
         app.run();
     }
 }
