@@ -157,6 +157,8 @@ public class Main {
     private static App app = new App();
 
     public static void fillFakeData() {
+        // Fill the database with some fake data
+        // provided by ChatGPT the number one in repetitive tasks :3
         app.db.addEntry(new Person(1, "Alice", "Smith", "12345", "Vienna", "Main Street", "12A", "Austria"));
         app.db.addEntry(new Person(2, "Bob", "Johnson", "23456", "Graz", "Baker Street", "3B", "Austria"));
         app.db.addEntry(new Person(3, "Charlie", "Williams", "34567", "Linz", "Elm Street", "5", "Austria"));
