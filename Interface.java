@@ -1,13 +1,15 @@
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 public class Interface {
     protected static Scanner scanner = new Scanner(System.in);
-    private HashMap<String, Supplier<Boolean>> registeredMenuItems = new HashMap<>();
-    private String invalidCommand;
+    private HashMap<String, Function<String, Boolean>> registeredMenuItems = new HashMap<>();
+    private String errorMessage;
 
-    public void register(String name, Supplier<Boolean> action) {
+    public void register(String name, Function<String, Boolean> action) {
         if (registeredMenuItems.containsKey(name)) {
             throw new IllegalStateException("Menu " + name + " got set a second time");
         }
@@ -23,30 +25,59 @@ public class Interface {
         return sb.toString();
     }
 
+    private List<String> parseCommand(String command) {
+        if (command.contains(":")) {
+            String[] command_parts = command.split(":", 2);
+            String command_name = command_parts[0]+":";
+            String command_arg = command_parts[1];
+            return List.of(command_name, command_arg);
+        }
+
+        if (registeredMenuItems.containsKey(command+":")) {
+            return List.of();
+        }
+
+        return Arrays.asList(command, null);
+    } 
+
+    public void showInfo(String error) {
+        errorMessage = error;
+    }
+
     private boolean cycle() {
         System.out.println("Registry v1.0 :3\nCommands listed:\n"+getStatsView()+"\n");
 
-        if (invalidCommand != null) {
-            System.out.println("Unknown command: " + invalidCommand + "\nplease only use listed commands or help if implemented");
-            invalidCommand = null;
+        if (errorMessage != null) {
+            System.out.println(errorMessage);
+            errorMessage = null;
         }
 
         System.out.print("> ");
-        String command = scanner.nextLine();
+        String userInput = scanner.nextLine();
         Helper.clearLastLine();
 
-        if (command.equals("#quit")) {
+        if (userInput.equals("#quit")) {
             return false;
         }
 
-        Supplier<Boolean> action = registeredMenuItems.get(command);
+        List<String> command_parts = parseCommand(userInput);
 
-        if (action == null) {
-            this.invalidCommand = command;
+        if (command_parts.isEmpty()) {
+            errorMessage = "Syntax error: " + userInput + " needs a arg with command:arg";
             return true;
         }
 
-        return action.get();
+        String command = command_parts.get(0);
+        String args = command_parts.get(1);
+
+        Function<String, Boolean> action = registeredMenuItems.get(command);
+
+        if (action == null) {
+            errorMessage = "Unknown command: " + command + "\nplease only use listed commands or help if implemented";
+            return true;
+        }
+
+        return action.apply(args == null ? null : args);
     }
 
     public void run() {
