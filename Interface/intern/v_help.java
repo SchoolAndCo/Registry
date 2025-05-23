@@ -8,7 +8,7 @@ public class v_help extends View {
     public Boolean init() {
         viewPrompt = "HELP";
         viewSignature = "help";
-        helperText = "view a help view for this Interface module";
+        helperText = "help view most likely not implemented 😂 u noob";
         return true;
     }
 
@@ -25,6 +25,6 @@ public class v_help extends View {
 
     @Override
     public Boolean onSelection(String userInputRaw) {
-        return false;
+        return true;
     }
 }
