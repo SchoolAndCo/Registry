@@ -1,6 +1,8 @@
 package Interface;
 
 import java.util.Scanner;
+import java.util.ArrayList;
+import Interface.exceptions.DuplicateViewMatchException;
 
 public abstract class View {
     public static Scanner scanner;
@@ -24,19 +26,20 @@ public abstract class View {
     }
 
     public static View signatureParse(String userInputRaw) {
-        Boolean response;
-        View viewInstance;
+        ArrayList<View> matched = new ArrayList<View>();
 
         for (Class<? extends View> ViewClass : global.registeredViews) {
-            viewInstance = View.instantiate(ViewClass);
-            response = viewInstance.onSelection(userInputRaw);
-
-            if (response) {
-                return viewInstance;
+            View viewInstance = View.instantiate(ViewClass);
+            if (viewInstance.onSelection(userInputRaw)) {
+                matched.add(viewInstance);
             }
         }
 
-        return null;
+        if (matched.size() > 1) {
+            throw new DuplicateViewMatchException(userInputRaw, matched.size());
+        }
+
+        return matched.isEmpty() ? null : matched.get(0);
     }
 
     public static void print(String text) {
