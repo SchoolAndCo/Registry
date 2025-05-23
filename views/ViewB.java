@@ -5,24 +5,24 @@ import Interface.View;
 import Interface.action.a_redirect;
 import Interface.intern.v_select;
 
-public class ViewA extends View {
+public class ViewB extends View {
     @Override
     public Boolean init() {
-        viewPrompt = "A";
-        viewSignature = "A";
-        helperText = "A VIEW UwU";
+        viewPrompt = "B";
+        viewSignature = "B";
+        helperText = "b view";
         return true;
     }
 
     @Override
     public void draw() {
-        System.out.println("ViewA");
+        System.out.println("\n B VIEW YEEY");
     }
 
     @Override
     public Action onCommand(String command) {
-        if (command.equals("b")) {
-            return new a_redirect(ViewB.class);
+        if (command.equals("a")) {
+            return new a_redirect(ViewA.class);
         }
 
         if (command.equals("back")) {
@@ -34,6 +34,6 @@ public class ViewA extends View {
 
     @Override
     public Boolean onSelection(String selection) {
-        return selection.equals("a");
+        return selection.equals("b");
     }
 }
