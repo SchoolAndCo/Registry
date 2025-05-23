@@ -33,16 +33,16 @@ public class v_select extends View {
 
     @Override
     public void draw() {
-        println("Select a action:");
-        for (String line : viewList.split("\n")) println(line);
-        newLine();
+        print("Select a action:\n");
+        for (String line : viewList.split("\n")) print(line+"\n");
+        print("\n");
 
         if (lastSelectionWrong != null) {
-            println(Color.ANSI_RED + "Something went wrong with: " + lastSelectionWrong + "\"" + Color.ANSI_RESET);
-            newLine();
+            print(Color.ANSI_RED + "Something went wrong with: " + lastSelectionWrong + "\"" + Color.ANSI_RESET + "\n");
+            print("\n");
             lastSelectionWrong = null;
         } else {
-            newLine();
+            print("\n");
         }
     }
 
