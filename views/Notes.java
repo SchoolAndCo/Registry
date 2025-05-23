@@ -21,11 +21,11 @@ public class Notes extends View {
 
     @Override
     public void draw() {
-        println("Notes:");
-        println("Type back to get back to selection");
+        print("Notes:\n");
+        print("Type back to get back to selection\n");
 
         for (String note : notes) {
-            println("- " + note);
+            print("- " + note + "\n");
         }
     }
 

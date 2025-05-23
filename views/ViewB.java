@@ -17,7 +17,7 @@ public class ViewB extends View {
 
     @Override
     public void draw() {
-        println("B VIEW YEEY");
+        print("B VIEW YEEY\n");
     }
 
     @Override
