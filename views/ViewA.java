@@ -2,6 +2,7 @@ package views;
 
 import Interface.Action;
 import Interface.View;
+import Interface.action.a_nop;
 import Interface.action.a_redirect;
 import Interface.intern.v_select;
 
@@ -16,7 +17,7 @@ public class ViewA extends View {
 
     @Override
     public void draw() {
-        System.out.println("ViewA");
+        println("ViewA");
     }
 
     @Override
@@ -29,7 +30,7 @@ public class ViewA extends View {
             return new a_redirect(v_select.class);
         }
 
-        return null;
+        return new a_nop();
     }
 
     @Override
