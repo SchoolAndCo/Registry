@@ -11,6 +11,8 @@ public class Interface {
     private Global global = Global.getInstance();
     private Boolean active = true;
     private View selectedView;
+    public int[] __terminalSize;
+    public int __renderCycleLines;
 
     public void registerView(Class<? extends View> viewClass) {
         global.registeredViews.add(viewClass);
@@ -23,11 +25,19 @@ public class Interface {
     }
     
     private Boolean cycle() {
+        __terminalSize = TerminalSize.getTerminalSize();
+        __renderCycleLines = 0;
+
         Helper.clearScreen();
         selectedView.draw();
 
+        int linesToFill = Math.max(0, __terminalSize[0] - __renderCycleLines);
+        for (int i = 0; i < linesToFill; i++) {
+            System.out.println();
+        }
+
         String view_prompt = (selectedView.viewPrompt==null ? "" : selectedView.viewPrompt);
-        System.out.print("\n" + view_prompt + "> ");
+        System.out.print(view_prompt + "> ");
         String userInputRaw = scanner.nextLine();
 
         Action viewResponse = selectedView.onCommand(userInputRaw);
@@ -54,6 +64,7 @@ public class Interface {
 
     public void start() {
         View.scanner = scanner;
+        View.__base = this;
         registerView(v_help.class);
         registerView(v_select.class);
 

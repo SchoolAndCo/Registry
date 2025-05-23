@@ -4,6 +4,7 @@ import Interface.Color;
 
 import Interface.Action;
 import Interface.View;
+import Interface.action.a_nop;
 import Interface.action.a_redirect;
 
 public class v_select extends View {
@@ -23,35 +24,42 @@ public class v_select extends View {
                 sb.append(": " + viewInstance.helperText).append("\n");
             }
         }
+        if (sb.length() > 0 && sb.charAt(sb.length() - 1) == '\n') {
+            sb.deleteCharAt(sb.length() - 1);
+        }
         viewList = sb.toString();
         return true;
     }
 
     @Override
     public void draw() {
-        System.out.println("Select a action:");
-        System.out.println(viewList);
-        
+        println("Select a action:");
+        for (String line : viewList.split("\n")) println(line);
+        newLine();
+
         if (lastSelectionWrong != null) {
-            System.out.println(Color.ANSI_RED + "Something went wrong with: " + Color.ANSI_CYAN + "\"" + lastSelectionWrong + "\"" + Color.ANSI_RESET);
+            println(Color.ANSI_RED + "Something went wrong with: " + lastSelectionWrong + "\"" + Color.ANSI_RESET);
+            newLine();
             lastSelectionWrong = null;
         } else {
-            System.out.println();
+            newLine();
         }
-
     }
 
     @Override
     public Action onCommand(String command) {
+        if (command.isEmpty()) {
+            return new a_nop();
+        }
+
         Class<? extends View> selectedView = View.signatureParse(command);
 
         if (selectedView == null) {
             lastSelectionWrong = command;
-            return null;
+            return new a_nop();
         }
 
         return new a_redirect(selectedView);
-
     }
 
     @Override
