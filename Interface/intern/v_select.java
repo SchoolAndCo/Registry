@@ -52,7 +52,7 @@ public class v_select extends View {
             return new a_nop();
         }
 
-        Class<? extends View> selectedView = View.signatureParse(command);
+        View selectedView = View.signatureParse(command);
 
         if (selectedView == null) {
             lastSelectionWrong = command;
