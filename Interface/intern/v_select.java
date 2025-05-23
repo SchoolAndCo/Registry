@@ -7,7 +7,7 @@ public class v_select extends View {
     private String viewList;
 
     @Override
-    public void init() {
+    public Boolean init() {
         StringBuilder sb = new StringBuilder();
         for (Class<? extends View> viewClass : global.registeredViews) {
             if (viewClass == v_select.class) continue;
@@ -20,6 +20,7 @@ public class v_select extends View {
             }
         }
         viewList = sb.toString();
+        return true;
     }
 
     @Override
@@ -31,6 +32,7 @@ public class v_select extends View {
     @Override
     public Action onCommand(String command) {
         return null;
+
     }
 
     @Override

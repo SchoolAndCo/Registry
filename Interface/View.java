@@ -9,7 +9,7 @@ public abstract class View {
     public String viewSignature;
     public String helperText;
 
-    public abstract void init();
+    public abstract Boolean init();
     public abstract void draw();
     public abstract Action onCommand(String command);
     public abstract Boolean onSelection(String userInputRaw);
