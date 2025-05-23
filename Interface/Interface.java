@@ -2,6 +2,7 @@ package Interface;
 
 import java.util.Scanner;
 
+import Interface.exceptions.InvalidViewActionReturn;
 import Interface.intern.v_help;
 import Interface.intern.v_select;
 
@@ -15,10 +16,10 @@ public class Interface {
         global.registeredViews.add(viewClass);
     }
 
-    private void selectedView(Class<? extends View> viewClass) {
+    public Boolean selectView(Class<? extends View> viewClass) {
         View new_view = View.instantiate(viewClass);
-        new_view.init();
         selectedView = new_view;
+        return new_view.init();
     }
 
     private Boolean cycle() {
@@ -34,13 +35,16 @@ public class Interface {
             return true;
         }
 
-        // later redirect and other actions for menus
+        if (viewResponse instanceof Action) {
+            return viewResponse.execute(this);
+        } 
 
-        return true;
+        // should not even come here but nice to have
+        throw new InvalidViewActionReturn();
     }
 
     private void mainLoop() {
-        selectedView(v_select.class);
+        selectView(v_select.class);
 
         while (active) {
             active = cycle();
