@@ -39,19 +39,8 @@ public abstract class View {
         return null;
     }
 
-    public static void println(String text) {
-        int lines = Helper.countWrappedLines(text + "\n", __base.__terminalSize[1]);
-        __base.__renderCycleLines += lines;
-        System.out.println(text);
-    }
-
-    public static void newLine() {
-        __base.__renderCycleLines++;
-        System.out.println();
-    }
-
     public static void print(String text) {
-        __base.__renderCycleLines += Helper.countWrappedLines(text, __base.__terminalSize[1]);
+        __base.__renderCycleLines += 1;
         System.out.print(text);
     }
 }
