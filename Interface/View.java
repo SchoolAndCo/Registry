@@ -23,7 +23,7 @@ public abstract class View {
         }
     }
 
-    public static Class<? extends View> signatureParse(String userInputRaw) {
+    public static View signatureParse(String userInputRaw) {
         Boolean response;
         View viewInstance;
 
@@ -32,7 +32,7 @@ public abstract class View {
             response = viewInstance.onSelection(userInputRaw);
 
             if (response) {
-                return ViewClass;
+                return viewInstance;
             }
         }
 

@@ -18,6 +18,11 @@ public class Interface {
         global.registeredViews.add(viewClass);
     }
 
+    public Boolean selectView(View viewInstance) {
+        selectedView = viewInstance;
+        return viewInstance.init();
+    }
+
     public Boolean selectView(Class<? extends View> viewClass) {
         View new_view = View.instantiate(viewClass);
         selectedView = new_view;
