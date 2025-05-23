@@ -1,12 +1,10 @@
 import Interface.Interface;
-class App extends Interface {
-
-}
-
+import views.ViewA;
 public class Main {
-    private static App app = new App();
+    private static Interface app = new Interface();
 
     public static void main(String[] args) {
+        app.registerView(ViewA.class);
         app.start();
     }
 }
