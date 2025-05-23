@@ -25,6 +25,6 @@ public class v_help extends View {
 
     @Override
     public Boolean onSelection(String userInputRaw) {
-        return true;
+        return false;
     }
 }

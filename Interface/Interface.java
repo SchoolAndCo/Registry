@@ -21,12 +21,13 @@ public class Interface {
         selectedView = new_view;
         return new_view.init();
     }
-
+    
     private Boolean cycle() {
+        Helper.clearScreen();
         selectedView.draw();
 
         String view_prompt = (selectedView.viewPrompt==null ? "" : selectedView.viewPrompt);
-        System.out.print(view_prompt + "> ");
+        System.out.print("\n" + view_prompt + "> ");
         String userInputRaw = scanner.nextLine();
 
         Action viewResponse = selectedView.onCommand(userInputRaw);
