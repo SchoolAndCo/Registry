@@ -6,6 +6,7 @@ public class Main {
     public static void main(String[] args) {
         app.registerView(ViewA.class);
         app.registerView(ViewB.class);
+        app.registerView(Notes.class);
         app.start();
     }
 }
